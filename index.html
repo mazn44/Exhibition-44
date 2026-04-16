@@ -1,444 +1,763 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دستور معرض إيفان | لوحة التشغيل الشاملة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --text-main: #1e272e;
-            --text-muted: #485460;
-            --accent-blue: #0984e3;
-            --accent-green: #00b894;
-            --accent-red: #d63031;
-            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            --sidebar-width: 260px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#B11216">
+<title>معرض إيفان — الدليل التشغيلي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ══ VARS ══ */
+:root{
+  --r:#B11216; --g:#D4AF37; --gr:#10B981;
+  --tg:#0088CC; --wa:#25D366;
+  --ease:.25s cubic-bezier(.4,0,.2,1);
+  --bg:#0f1117; --bg2:#161b27; --bg3:#1e2436;
+  --card:rgba(22,27,39,.9); --glass:rgba(255,255,255,.04);
+  --border:rgba(255,255,255,.08); --text:#e2e8f0; --text2:#94a3b8; --text3:#64748b;
+}
+html:not(.dark){
+  --bg:#f0f4fa; --bg2:#fff; --bg3:#e8eef8;
+  --card:rgba(255,255,255,.92); --glass:rgba(255,255,255,.72);
+  --border:rgba(0,0,0,.08); --text:#0f172a; --text2:#475569; --text3:#94a3b8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;transition:background var(--ease),color var(--ease);}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--r);border-radius:99px;}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-        }
+/* ══ BG ══ */
+.blob{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(120px);opacity:.08;}
+.b1{width:600px;height:600px;background:var(--r);top:-200px;right:-150px;animation:bf 9s ease-in-out infinite alternate;}
+.b2{width:400px;height:400px;background:#1e40af;bottom:-150px;left:-120px;animation:bf 11s ease-in-out infinite alternate-reverse;opacity:.06;}
+@keyframes bf{from{transform:scale(1) translate(0,0);}to{transform:scale(1.2) translate(30px,-20px);}}
+html:not(.dark) .blob{opacity:.04;}
 
-        body {
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text-main);
-            display: flex;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
+/* ══ SIDEBAR ══ */
+#sb{position:fixed;top:0;right:0;height:100%;width:260px;z-index:100;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;transition:transform var(--ease);overflow:hidden;}
+.dark #sb{box-shadow:-6px 0 30px rgba(0,0,0,.5);}
+html:not(.dark) #sb{box-shadow:-4px 0 20px rgba(0,0,0,.1);}
+@media(max-width:1023px){#sb{transform:translateX(100%);}#sb.open{transform:translateX(0);}}
+#sbOv{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;display:none;backdrop-filter:blur(4px);}
+#sbOv.on{display:block;}
+.sb-h{padding:18px 14px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sb-brand{font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;letter-spacing:.1em;text-transform:uppercase;}
+.sb-brand span{color:var(--r);}
+.sb-cls{width:32px;height:32px;border-radius:9px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);font-size:13px;}
+.sb-area{flex:1;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:2px;}
+.sb-area::-webkit-scrollbar{width:2px;}
+.sb-cat{font-family:'Outfit',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);padding:10px 10px 4px;}
+.sl{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;font-size:13.5px;font-weight:600;color:var(--text2);transition:all var(--ease);cursor:pointer;text-decoration:none;}
+.sl:hover,.sl.on{background:rgba(177,18,22,.1);color:var(--r);}
+.sl .si{width:28px;height:28px;border-radius:8px;background:rgba(148,163,184,.08);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.sl:hover .si,.sl.on .si{background:rgba(177,18,22,.12);color:var(--r);}
+.sb-bot{border-top:1px solid var(--border);padding:12px 14px;}
+.sb-phone{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--r);margin-bottom:6px;}
+.sb-copy{font-family:'Outfit',sans-serif;font-size:8px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;}
 
-        /* القائمة الجانبية الزجاجية */
-        aside {
-            width: var(--sidebar-width);
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-left: 1px solid var(--glass-border);
-            position: fixed;
-            right: 0;
-            top: 0;
-            height: 100vh;
-            padding: 30px 15px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
+/* ══ HEADER ══ */
+#hdr{position:sticky;top:0;z-index:50;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);transition:background var(--ease);}
+.dark #hdr{background:rgba(15,17,23,.9);}
+html:not(.dark) #hdr{background:rgba(240,244,250,.95);}
+.hl{display:flex;align-items:center;gap:10px;}
+.hr{display:flex;align-items:center;gap:8px;}
+.ib{width:40px;height:40px;border-radius:12px;background:var(--glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text2);cursor:pointer;transition:all var(--ease);}
+.ib:hover{color:var(--r);}
+@media(min-width:1024px){.ib.mb{display:none;}}
+.brand{font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;letter-spacing:.12em;text-transform:uppercase;}
+.brand span{color:var(--r);}
 
-        .logo-container {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
+/* ══ MAIN ══ */
+.wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:28px 16px 60px;}
+@media(min-width:1024px){.wrap{margin-right:260px;}}
 
-        .logo-container h2 {
-            font-size: 28px;
-            font-weight: 800;
-            color: #2d3436;
-            letter-spacing: 1px;
-        }
+/* ══ HERO ══ */
+.hero{text-align:center;padding:40px 20px 36px;animation:fu .6s ease both;}
+@keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.tag{display:inline-flex;align-items:center;gap:8px;background:rgba(177,18,22,.1);border:1px solid rgba(177,18,22,.25);color:var(--r);border-radius:99px;padding:5px 16px;font-size:11.5px;font-weight:800;font-family:'Outfit',sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--r);animation:pd 2s infinite;}
+@keyframes pd{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.6);opacity:.5;}}
+.hero h1{font-size:clamp(26px,5.5vw,48px);font-weight:900;line-height:1.2;margin-bottom:12px;}
+.hero h1 .acc{color:var(--r);}
+.hero p{font-size:clamp(13px,2vw,16px);color:var(--text2);max-width:560px;margin:0 auto;line-height:1.75;font-weight:500;}
 
-        .logo-container p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+/* ══ SECTION ══ */
+.sec{margin-bottom:48px;scroll-margin-top:80px;}
+.sh{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.sh::after{content:'';flex:1;height:1px;background:var(--border);}
+.sh h2{font-size:clamp(17px,2.8vw,22px);font-weight:900;white-space:nowrap;}
+.sl2{font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);}
 
-        nav ul { list-style: none; }
-        nav ul li { margin-bottom: 8px; }
-        nav ul li a {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            color: var(--text-main);
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        nav ul li a i {
-            margin-left: 12px;
-            font-size: 18px;
-            width: 25px;
-            text-align: center;
-            color: var(--accent-blue);
-        }
-        nav ul li a:hover {
-            background: rgba(255, 255, 255, 0.6);
-            transform: translateX(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
+/* ══ GLASS CARD ══ */
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;transition:border-color var(--ease),transform var(--ease),box-shadow var(--ease);position:relative;overflow:hidden;}
+.card:hover{border-color:rgba(177,18,22,.35);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.25);}
+html:not(.dark) .card:hover{box-shadow:0 16px 40px rgba(177,18,22,.1);}
+.card::before{content:'';position:absolute;inset:0;border-radius:20px;background:radial-gradient(circle at 80% 10%,rgba(177,18,22,.06),transparent 60%);opacity:0;transition:opacity .35s;}
+.card:hover::before{opacity:1;}
+.card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;flex-shrink:0;}
+.card-title{font-size:16.5px;font-weight:900;margin-bottom:7px;}
+.card-desc{font-size:13px;color:var(--text2);line-height:1.7;font-weight:500;}
 
-        /* المحتوى الرئيسي */
-        main {
-            margin-right: var(--sidebar-width);
-            padding: 40px;
-            width: calc(100% - var(--sidebar-width));
-        }
+/* ══ STATS ROW ══ */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:36px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;text-align:center;transition:all var(--ease);}
+.stat:hover{border-color:rgba(177,18,22,.35);transform:translateY(-2px);}
+.stat-num{font-family:'Outfit',sans-serif;font-size:clamp(28px,5vw,40px);font-weight:900;background:linear-gradient(135deg,var(--r),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:5px;}
+.stat-label{font-size:12px;color:var(--text2);font-weight:600;}
 
-        .header-title {
-            text-align: center;
-            margin-bottom: 50px;
-            animation: fadeInDown 1s ease;
-        }
+/* ══ RULE CARDS ══ */
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.rule-card{border-radius:18px;padding:20px;border:1px solid var(--border);background:var(--card);transition:all var(--ease);position:relative;overflow:hidden;}
+.rule-card::after{content:'';position:absolute;top:0;right:0;bottom:0;width:3px;border-radius:0 18px 18px 0;}
+.rule-red::after{background:var(--r);}
+.rule-green::after{background:var(--gr);}
+.rule-gold::after{background:var(--g);}
+.rule-blue::after{background:#3B82F6;}
+.rule-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(0,0,0,.25);}
+.rule-num{font-family:'Outfit',sans-serif;font-size:32px;font-weight:900;opacity:.12;line-height:1;margin-bottom:8px;}
+.rule-title{font-size:15px;font-weight:900;margin-bottom:7px;}
+.rule-desc{font-size:12.5px;color:var(--text2);line-height:1.65;font-weight:500;}
 
-        .header-title h1 {
-            font-size: 3em;
-            color: #2d3436;
-            text-shadow: 0 4px 15px rgba(255,255,255,0.5);
-            margin-bottom: 10px;
-        }
+/* ══ DEPT TABS ══ */
+.dept-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:22px;}
+.dept-tabs::-webkit-scrollbar{display:none;}
+.dtab{padding:8px 18px;border-radius:99px;font-size:12.5px;font-weight:700;border:1px solid var(--border);background:var(--glass);color:var(--text2);cursor:pointer;white-space:nowrap;transition:all var(--ease);font-family:'Tajawal',sans-serif;}
+.dtab:hover,.dtab.on{background:var(--r);border-color:var(--r);color:#fff;}
 
-        /* الكروت الزجاجية للأقسام */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            padding: 35px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
+/* ══ DEPT SECTION ══ */
+.dpanel{display:none;}
+.dpanel.on{display:block;}
 
-        .glass-panel:hover {
-            transform: translateY(-5px);
-        }
+/* ══ LIST ══ */
+.pl{display:flex;flex-direction:column;gap:10px;}
+.pi{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:14px;background:var(--bg3);border:1px solid var(--border);transition:all var(--ease);}
+.pi:hover{border-color:rgba(177,18,22,.3);background:rgba(177,18,22,.04);}
+.pi-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px;}
+.pi-ok{background:rgba(16,185,129,.12);color:var(--gr);}
+.pi-no{background:rgba(177,18,22,.12);color:var(--r);}
+.pi-tip{background:rgba(212,175,55,.12);color:var(--g);}
+.pi-body{flex:1;}
+.pi-title{font-size:13.5px;font-weight:700;margin-bottom:3px;}
+.pi-desc{font-size:12px;color:var(--text2);line-height:1.6;}
 
-        .section-title {
-            font-size: 24px;
-            color: #2d3436;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            border-bottom: 2px solid rgba(255,255,255,0.6);
-            padding-bottom: 10px;
-        }
+/* ══ KPI TABLE ══ */
+.kpi-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;border-radius:14px;overflow:hidden;}
+.kpi-table thead tr{background:rgba(177,18,22,.08);}
+.kpi-table th{padding:12px 14px;font-weight:800;text-align:right;color:var(--r);font-size:11.5px;font-family:'Outfit',sans-serif;text-transform:uppercase;letter-spacing:.08em;}
+.kpi-table td{padding:11px 14px;border-top:1px solid var(--border);}
+.kpi-table tr:hover td{background:rgba(177,18,22,.03);}
+.kpi-val{font-family:'Outfit',sans-serif;font-weight:800;color:var(--gr);font-size:14px;}
 
-        .section-title i {
-            margin-left: 15px;
-            font-size: 28px;
-            color: var(--accent-blue);
-        }
+/* ══ PHASE ══ */
+.phases{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.phase{border-radius:16px;padding:18px;border:1px solid var(--border);background:var(--card);transition:all var(--ease);position:relative;}
+.phase::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;}
+.ph1::before{background:linear-gradient(90deg,#3B82F6,#60A5FA);}
+.ph2::before{background:linear-gradient(90deg,var(--g),#FCD34D);}
+.ph3::before{background:linear-gradient(90deg,var(--gr),#34D399);}
+.phase:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.2);}
+.ph-num{font-family:'Outfit',sans-serif;font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
+.ph-title{font-size:15px;font-weight:900;margin-bottom:8px;}
+.ph-items{display:flex;flex-direction:column;gap:5px;}
+.ph-item{font-size:12px;color:var(--text2);display:flex;align-items:flex-start;gap:7px;line-height:1.5;}
+.ph-item::before{content:'→';color:var(--r);font-weight:700;flex-shrink:0;margin-top:1px;}
 
-        /* تنسيق الشبكة للمعلومات */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-        }
+/* ══ QUOTE ══ */
+.quote{border-right:4px solid var(--r);padding:16px 20px;background:rgba(177,18,22,.06);border-radius:0 16px 16px 0;margin-bottom:20px;}
+.quote p{font-size:14.5px;font-weight:700;line-height:1.7;font-style:italic;color:var(--text);}
 
-        .info-card {
-            background: rgba(255, 255, 255, 0.5);
-            padding: 25px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.7);
-        }
+/* ══ FORBIDDEN LIST ══ */
+.fl{display:flex;flex-direction:column;gap:8px;}
+.fi{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:rgba(177,18,22,.06);border:1px solid rgba(177,18,22,.15);}
+.fi i{color:var(--r);margin-top:3px;flex-shrink:0;font-size:13px;}
+.fi p{font-size:13px;color:var(--text2);line-height:1.55;font-weight:500;}
+.fi p strong{color:var(--r);}
 
-        .info-card h4 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #2d3436;
-        }
+/* ══ ALLOWED ══ */
+.al{display:flex;flex-direction:column;gap:8px;}
+.ai{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.18);}
+.ai i{color:var(--gr);margin-top:3px;flex-shrink:0;font-size:13px;}
+.ai p{font-size:13px;color:var(--text2);line-height:1.55;font-weight:500;}
+.ai p strong{color:var(--gr);}
 
-        ul.custom-list {
-            list-style: none;
-        }
+/* ══ SCRIPTS ══ */
+.script-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;}
+.sc-label{font-size:10px;font-weight:800;color:var(--text3);font-family:'Outfit',sans-serif;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;}
+.sc-lang{font-size:13px;color:var(--text2);line-height:1.65;font-weight:500;direction:rtl;}
+.sc-trans{font-size:12px;color:var(--text3);margin-top:5px;font-style:italic;}
 
-        ul.custom-list li {
-            position: relative;
-            padding-right: 25px;
-            margin-bottom: 12px;
-            font-size: 15px;
-        }
+/* ══ CTA CARD ══ */
+.cta-card{border-radius:22px;padding:30px 24px;text-align:center;background:var(--card);border:1px solid rgba(177,18,22,.25);position:relative;overflow:hidden;}
+.cta-card::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(177,18,22,.15),transparent 70%);}
+.cta-icon{width:60px;height:60px;border-radius:50%;background:rgba(177,18,22,.12);border:2px solid rgba(177,18,22,.25);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px;animation:ring 2.5s ease-in-out infinite;}
+@keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(177,18,22,.25);}50%{box-shadow:0 0 0 12px rgba(177,18,22,0);}}
+.cta-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:14px;font-size:13.5px;font-weight:700;transition:all var(--ease);font-family:'Tajawal',sans-serif;}
+.btn:hover{transform:translateY(-2px);}
+.btn-wa{background:var(--wa);color:#fff;}
+.btn-tg{background:var(--tg);color:#fff;}
+.btn-tel{background:var(--bg3);border:1px solid var(--border);color:var(--text);}
 
-        ul.custom-list li::before {
-            content: '•';
-            color: var(--accent-blue);
-            font-weight: bold;
-            font-size: 20px;
-            position: absolute;
-            right: 0;
-            top: -2px;
-        }
+/* ══ TOAST ══ */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--gr);color:#fff;padding:11px 22px;border-radius:99px;font-size:13.5px;font-weight:700;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+#toast.s{transform:translateX(-50%) translateY(0);}
 
-        /* تمييز المسموح والممنوع */
-        .tag-allowed { color: var(--accent-green); font-weight: 700; display: inline-block; margin-bottom: 5px; }
-        .tag-forbidden { color: var(--accent-red); font-weight: 700; display: inline-block; margin-bottom: 5px; }
-        
-        .script-box {
-            background: rgba(0, 0, 0, 0.05);
-            border-right: 4px solid var(--accent-blue);
-            padding: 15px;
-            border-radius: 10px;
-            font-style: italic;
-            margin-top: 10px;
-            font-size: 15px;
-        }
+/* ══ REVEAL ══ */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
 
-        .kurdish-text {
-            color: #0984e3;
-            font-weight: bold;
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* رسائل تحذيرية وذهبية */
-        .golden-rule {
-            background: linear-gradient(135deg, rgba(241, 196, 15, 0.2) 0%, rgba(243, 156, 18, 0.2) 100%);
-            border: 1px solid rgba(241, 196, 15, 0.4);
-            text-align: center;
-        }
-
-        /* شاشات الجوال */
-        @media (max-width: 900px) {
-            aside { transform: translateX(100%); transition: 0.3s; }
-            main { margin-right: 0; width: 100%; padding: 20px; }
-        }
-    </style>
+/* ══ RESPONSIVE ══ */
+@media(max-width:640px){.rules-grid{grid-template-columns:1fr;}.kpi-table th,.kpi-table td{padding:9px 10px;font-size:12px;}.phases{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 
-    <aside>
-        <div class="logo-container">
-            <h2>IVAN</h2>
-            <p>SHOWROOM - DUHOK</p>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div id="toast"></div>
+
+<!-- ══ SIDEBAR ══ -->
+<div id="sbOv" onclick="closeSb()"></div>
+<aside id="sb">
+  <div class="sb-h">
+    <div class="sb-brand">IVAN <span>SHOW</span></div>
+    <div class="sb-cls" onclick="closeSb()"><i class="fa-solid fa-times"></i></div>
+  </div>
+  <div class="sb-area">
+    <div class="sb-cat">القائمة الرئيسية</div>
+    <a class="sl on" href="#top" onclick="scrollTo('#top');closeSb()"><span class="si"><i class="fa-solid fa-house"></i></span>المقدمة</a>
+    <a class="sl" href="#golden" onclick="scrollTo('#golden');closeSb()"><span class="si"><i class="fa-solid fa-star"></i></span>القواعد الذهبية</a>
+    <a class="sl" href="#kpis" onclick="scrollTo('#kpis');closeSb()"><span class="si"><i class="fa-solid fa-chart-bar"></i></span>مؤشرات الأداء</a>
+    <a class="sl" href="#plan" onclick="scrollTo('#plan');closeSb()"><span class="si"><i class="fa-solid fa-map"></i></span>خطة النشر</a>
+    <div class="sb-cat">الأقسام</div>
+    <a class="sl" href="#depts" onclick="scrollTo('#depts');setTab('marketing');closeSb()"><span class="si"><i class="fa-solid fa-bullhorn"></i></span>التسويق والإعلام</a>
+    <a class="sl" href="#depts" onclick="scrollTo('#depts');setTab('sales');closeSb()"><span class="si"><i class="fa-solid fa-handshake"></i></span>المبيعات</a>
+    <a class="sl" href="#depts" onclick="scrollTo('#depts');setTab('cs');closeSb()"><span class="si"><i class="fa-solid fa-comments"></i></span>خدمة العملاء</a>
+    <a class="sl" href="#depts" onclick="scrollTo('#depts');setTab('carpenter');closeSb()"><span class="si"><i class="fa-solid fa-hammer"></i></span>النجارة والتركيب</a>
+    <a class="sl" href="#depts" onclick="scrollTo('#depts');setTab('warehouse');closeSb()"><span class="si"><i class="fa-solid fa-boxes-stacked"></i></span>المخازن والنقل</a>
+    <a class="sl" href="#depts" onclick="scrollTo('#depts');setTab('clean');closeSb()"><span class="si"><i class="fa-solid fa-broom"></i></span>النظافة والخدمات</a>
+    <div class="sb-cat">سمعتنا الرقمية</div>
+    <a class="sl" href="#digital" onclick="scrollTo('#digital');closeSb()"><span class="si"><i class="fa-solid fa-globe"></i></span>الأداء الرقمي</a>
+    <a class="sl" href="#reviews" onclick="scrollTo('#reviews');closeSb()"><span class="si"><i class="fa-solid fa-star-half-stroke"></i></span>التقييمات والسمعة</a>
+    <a class="sl" href="#contact" onclick="scrollTo('#contact');closeSb()"><span class="si"><i class="fa-solid fa-phone"></i></span>التواصل</a>
+  </div>
+  <div class="sb-bot">
+    <div class="sb-phone"><i class="fa-solid fa-phone"></i>+964 751 484 4125</div>
+    <div class="sb-copy">&copy; 2026 Ivan Showroom — Duhok</div>
+  </div>
+</aside>
+
+<!-- ══ HEADER ══ -->
+<header id="hdr">
+  <div class="hl">
+    <button class="ib mb" onclick="openSb()"><i class="fa-solid fa-bars"></i></button>
+    <div class="brand">IVAN <span>SHOW</span></div>
+  </div>
+  <div class="hr">
+    <a href="index.html" class="ib" title="البوابة الرئيسية"><i class="fa-solid fa-arrow-right"></i></a>
+    <button class="ib" onclick="toggleTheme()" id="thBtn" title="تبديل الوضع">
+      <i class="fa-solid fa-moon" id="mI"></i><i class="fa-solid fa-sun" id="sI" style="display:none"></i>
+    </button>
+  </div>
+</header>
+
+<!-- ══ PAGE ══ -->
+<div class="wrap" id="top">
+
+  <!-- HERO -->
+  <div class="hero rv">
+    <div class="tag"><span class="dot"></span>دستور العمل الداخلي</div>
+    <h1>الدليل التشغيلي<br><span class="acc">معرض إيفان</span></h1>
+    <p>كل ما يحتاجه كل موظف معرفته — التسويق، المبيعات، خدمة العملاء، النجارة، المخازن، والنظافة. هذه الوثيقة هي قانوننا الداخلي.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats rv">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">طوابق في المعرض</div></div>
+    <div class="stat"><div class="stat-num">45+</div><div class="stat-label">موظف نشط</div></div>
+    <div class="stat"><div class="stat-num">5 د</div><div class="stat-label">الرد على الزبون</div></div>
+    <div class="stat"><div class="stat-num">24 س</div><div class="stat-label">حل أي مشكلة</div></div>
+    <div class="stat"><div class="stat-num">4.5+</div><div class="stat-label">هدف تقييم Google</div></div>
+  </div>
+
+  <!-- ══ GOLDEN RULES ══ -->
+  <section class="sec" id="golden">
+    <div class="sh rv"><span class="sl2">المبادئ الأساسية</span><h2>⭐ القواعد الذهبية الأربع</h2></div>
+    <div class="quote rv">
+      <p>"نحكي الحقيقة كما هي، نقدم الحلول دون أعذار، ونحافظ على الاحترام المطلق للزبون. سمعتنا هي رأس مالنا الوحيد."</p>
+    </div>
+    <div class="rules-grid">
+      <div class="rule-card rule-red rv">
+        <div class="rule-num">01</div>
+        <div class="rule-title"><i class="fa-solid fa-shield-halved" style="color:var(--r);margin-left:7px"></i>الصدق المطلق والشفافية</div>
+        <div class="rule-desc">يمنع المبالغة في وصف القطع. يمنع الحديث عن المنافسين. الزبون يشتري مصداقيتنا قبل الأثاث. الخداع يقتل الثقة ويقتل المعرض.</div>
+      </div>
+      <div class="rule-card rule-green rv">
+        <div class="rule-num">02</div>
+        <div class="rule-title"><i class="fa-solid fa-bolt" style="color:var(--gr);margin-left:7px"></i>السرعة في الإنجاز</div>
+        <div class="rule-desc">الرد على الرسائل: 5 دقائق كحد أقصى. التسليم: في موعده الدقيق. حل أي مشكلة: خلال 24 ساعة. الوقت هو مقياس الاحتراف.</div>
+      </div>
+      <div class="rule-card rule-gold rv">
+        <div class="rule-num">03</div>
+        <div class="rule-title"><i class="fa-solid fa-handshake" style="color:var(--g);margin-left:7px"></i>الثبات في المستوى</div>
+        <div class="rule-desc">نفس مستوى الاحترام سواء كان الزبون يتحدث مع المدير أو عامل التحميل أو النجار في البيت. نحن كيان واحد بصوت واحد.</div>
+      </div>
+      <div class="rule-card rule-blue rv">
+        <div class="rule-num">04</div>
+        <div class="rule-title"><i class="fa-solid fa-circle-check" style="color:#3B82F6;margin-left:7px"></i>حل المشكلة بدل الجدال</div>
+        <div class="rule-desc">الزبون الغاضب يريد حلاً لا مبررات. يمنع توجيه اللوم للزبون. القاعدة: استمع، اعترف، قدم خطوة الحل مباشرة.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DEPTS ══ -->
+  <section class="sec" id="depts">
+    <div class="sh rv"><span class="sl2">الأقسام</span><h2>📂 دليل كل قسم</h2></div>
+    <div class="dept-tabs rv">
+      <div class="dtab on" onclick="setTab('marketing',this)">📢 التسويق والإعلام</div>
+      <div class="dtab" onclick="setTab('sales',this)">🤝 المبيعات</div>
+      <div class="dtab" onclick="setTab('cs',this)">💬 خدمة العملاء</div>
+      <div class="dtab" onclick="setTab('carpenter',this)">🔨 النجارة والتركيب</div>
+      <div class="dtab" onclick="setTab('warehouse',this)">📦 المخازن والنقل</div>
+      <div class="dtab" onclick="setTab('clean',this)">🧹 النظافة والخدمات</div>
+    </div>
+
+    <!-- ══ MARKETING ══ -->
+    <div class="dpanel on" id="p-marketing">
+      <div class="card rv" style="margin-bottom:16px">
+        <div class="card-title"><i class="fa-solid fa-bullhorn" style="color:var(--r);margin-left:8px"></i>قسم التسويق والإعلام الرقمي</div>
+        <div class="card-desc">الفريق المسؤول عن حضور المعرض الرقمي على كل المنصات. مسؤوليتهم تشكيل الصورة الأولى التي يراها الزبون قبل أن يدخل المعرض.</div>
+      </div>
+
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">المسؤوليات</span><h2 style="font-size:16px">الأدوار والمهام</h2></div>
+      <div class="rules-grid rv" style="margin-bottom:20px">
+        <div class="rule-card rule-blue">
+          <div class="card-icon" style="background:rgba(59,130,246,.12);color:#3B82F6"><i class="fa-solid fa-clapperboard"></i></div>
+          <div class="rule-title">مسؤول الواجهة الإعلامية</div>
+          <div class="rule-desc">يمثل دور "عين الزبون الخبير". لا يبيع، بل ينصح بصدق. يُصوَّر من قِبل المصوّر لضمان زوايا احترافية. هو وجه المعرض أمام الكاميرا.</div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#rules"><i class="fa-solid fa-crown"></i> المبادئ الذهبية</a></li>
-                <li><a href="#marketing"><i class="fa-solid fa-bullhorn"></i> الإعلام والتسويق</a></li>
-                <li><a href="#customer-service"><i class="fa-solid fa-headset"></i> خدمة العملاء</a></li>
-                <li><a href="#sales"><i class="fa-solid fa-handshake"></i> مندوبو المبيعات</a></li>
-                <li><a href="#carpentry"><i class="fa-solid fa-hammer"></i> النجارة والتركيب</a></li>
-                <li><a href="#warehouse"><i class="fa-solid fa-warehouse"></i> المخازن والنقل</a></li>
-                <li><a href="#cleaning"><i class="fa-solid fa-broom"></i> النظافة والخدمات</a></li>
-            </ul>
-        </nav>
-    </aside>
-
-    <main>
-        <div class="header-title">
-            <h1>الفهرس التشغيلي - معرض إيفان</h1>
-            <p>نظام التشغيل القياسي (SOP) لجميع كوادر المعرض - قانون التعاملات اليومية</p>
-            <p style="font-weight: bold; margin-top: 10px; color: #d63031;">"نحكي الحقيقة كما هي، نقدم الحلول دون أعذار، ونحافظ على الاحترام المطلق للزبون. سمعتنا هي رأس مالنا الوحيد."</p>
+        <div class="rule-card rule-red">
+          <div class="card-icon" style="background:rgba(177,18,22,.12);color:var(--r)"><i class="fa-solid fa-camera"></i></div>
+          <div class="rule-title">المصوّر والمصمم</div>
+          <div class="rule-desc">مسؤول عن جودة الصورة والفيديو والتصميم. لا ينشر أي محتوى بدون مراجعة مدير القسم. يعدّل الفيديوهات بـ CapCut أو VN بدون انتقالات مزعجة.</div>
         </div>
+        <div class="rule-card rule-green">
+          <div class="card-icon" style="background:rgba(16,185,129,.12);color:var(--gr)"><i class="fa-solid fa-comments"></i></div>
+          <div class="rule-title">فريق الرد والتواصل</div>
+          <div class="rule-desc">يردون على كل استفسار خلال 5 دقائق. يستخدمون القوالب المعتمدة. لا يجادلون ولا يعطون أسعاراً نهائية بدون مراجعة مدير المبيعات.</div>
+        </div>
+        <div class="rule-card rule-gold">
+          <div class="card-icon" style="background:rgba(212,175,55,.12);color:var(--g)"><i class="fa-solid fa-sitemap"></i></div>
+          <div class="rule-title">مدير القسم</div>
+          <div class="rule-desc">يضع الاستراتيجية الشهرية، يراجع كل المحتوى قبل النشر، يتابع مؤشرات الأداء، يقرر الإعلانات المدفوعة، ويقيّم أداء الفريق أسبوعياً.</div>
+        </div>
+      </div>
 
-        <section id="rules" class="glass-panel golden-rule">
-            <h2 class="section-title" style="justify-content: center; border: none;"><i class="fa-solid fa-star"></i> القواعد الذهبية الأربع (تطبق على الجميع)</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>1. الصدق المطلق والشفافية</h4>
-                    <p>يمنع منعاً باتاً المبالغة في وصف الجودة أو الخداع. يمنع ذكر المنافسين أو مقارنة بضائعنا بهم. الزبون يشتري مصداقيتنا أولاً.</p>
-                </div>
-                <div class="info-card">
-                    <h4>2. السرعة في الإنجاز</h4>
-                    <p>الرد على الرسائل خلال 5 دقائق كحد أقصى. تسليم البضاعة في موعدها، ومتابعة أي مشكلة وحلها خلال 24 ساعة.</p>
-                </div>
-                <div class="info-card">
-                    <h4>3. الثبات في المستوى</h4>
-                    <p>نفس مستوى الاحترام سواء كان الزبون مع مدير المبيعات، عامل التحميل، أو النجار. نحن كيان واحد بصوت واحد.</p>
-                </div>
-                <div class="info-card">
-                    <h4>4. حل المشكلة بدل الجدال</h4>
-                    <p>الزبون الغاضب يبحث عن حل وليس مبررات. يمنع الدفاع أو توجيه اللوم للزبون. استمع، اعترف بالخطأ، وقدم الحل فوراً.</p>
-                </div>
-            </div>
-        </section>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">الممنوعات</span><h2 style="font-size:16px">الخطوط الحمراء — ممنوع مطلقاً</h2></div>
+      <div class="fl rv" style="margin-bottom:20px">
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>النشر العشوائي:</strong> يمنع نشر أي محتوى دون مراجعة وموافقة مدير التسويق.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الموسيقى الصاخبة والمؤثرات المزعجة:</strong> المحتوى هادئ، يركز على صوت الشرح وتفاصيل القطعة.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الإفراط في النشر:</strong> الحد الأقصى فيديو واحد كل ساعة لتجنب حرق المحتوى على المتابعين.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>التصوير بدون إذن:</strong> يمنع تصوير الزبائن أو نشر صورهم بدون إذن مسبق منهم.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>السخرية والتشهير:</strong> يمنع الحديث عن الزبائن أو المنافسين بسوء في أي منشور أو تعليق.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>المبالغة في الوصف:</strong> يمنع وصف قطعة مستعملة بأنها كالجديدة أو المبالغة في الجودة.</p></div>
+      </div>
 
-        <section id="marketing" class="glass-panel">
-            <h2 class="section-title"><i class="fa-brands fa-tiktok"></i> الإعلام والتسويق الرقمي</h2>
-            <p style="margin-bottom: 20px;"><strong>الفريق المسؤول:</strong> مازن (المدير)، أيوب (الواجهة)، الند (المصمم والمصور)</p>
-            
-            <div class="info-grid">
-                <div class="info-card">
-                    <span class="tag-forbidden">الخطوط الحمراء (ممنوعات مطلقة):</span>
-                    <ul class="custom-list">
-                        <li><strong>النشر العشوائي:</strong> يمنع نشر أي محتوى دون مراجعته والموافقة عليه من مازن.</li>
-                        <li><strong>المؤثرات المزعجة:</strong> يمنع الموسيقى الصاخبة والانتقالات المزعجة. المحتوى يجب أن يكون هادئاً وواضحاً.</li>
-                        <li><strong>إزعاج المتابعين:</strong> فيديو واحد كل ساعة كحد أقصى لتجنب حرق المحتوى.</li>
-                        <li><strong>السخرية والتشهير:</strong> يمنع تصوير الزبائن بدون إذن أو الاستهزاء بأي موقف.</li>
-                    </ul>
-                </div>
-                
-                <div class="info-card">
-                    <span class="tag-allowed">منهجية أيوب (الواجهة) والند (المصور):</span>
-                    <ul class="custom-list">
-                        <li>أيوب هو "عين الزبون الخبير" (ينصح ولا يبيع). الند يصوره بثبات للحفاظ على الاحترافية.</li>
-                        <li><strong>قسم المستعمل (الشفافية الصادمة):</strong> إظهار عيوب القطعة والخدوش قبل الميزات، وتوضيح أن السعر رخيص بسبب العيب.</li>
-                        <li><strong>قسم الجديد:</strong> عدم التفخيم. إذا كانت القطعة تجارية قل "ممتازة للميزانيات المحدودة".</li>
-                    </ul>
-                </div>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">المطلوب</span><h2 style="font-size:16px">أنواع المحتوى المعتمدة</h2></div>
+      <div class="al rv" style="margin-bottom:20px">
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>جولات سريعة داخل المعرض (30-45 ثانية):</strong> المشي ببطء بين الممرات مع تعليق صوتي واضح على القطع.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>قبل وبعد (15-20 ثانية):</strong> للأثاث المستعمل — صور القطعة كما هي ثم بعد التنظيف. أقوى محتوى ينتشر.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>تحدي السعر (20-30 ثانية):</strong> قارن سعر قطعة بسعر السوق. أظهر قيمة الصفقة الحقيقية.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>نصائح الديكور (20 ثانية):</strong> "كيف تختار حجم السجادة" أو "ألوان غرف النوم 2026" — يبني ثقة كخبراء.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>المستعمل بشفافية صادمة:</strong> أظهر العيوب قبل المزايا. كن صريحاً: "سعرها مناسب لوجود هذا العيب البسيط".</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>تجارب الزبائن الحقيقية (10 ثوانٍ):</strong> زبون يتكلم بصدق عن تجربته. لا نصوص مكتوبة، فقط حديث طبيعي.</p></div>
+      </div>
 
-                <div class="info-card" style="grid-column: 1 / -1;">
-                    <h4><i class="fa-solid fa-microphone"></i> النصوص المعتمدة للتصوير (باديني)</h4>
-                    <div class="script-box">
-                        <p><strong>الثواني الثلاث الأولى (الخطاف):</strong></p>
-                        <p class="kurdish-text">"سلاڤ و رێز... ئەز ئەیوبم ژ پێشانگەها ئاڤان... وەرن دا ڤێ پارچێ ژ نێزیکڤە ببینین."</p>
-                        <p>(سلام واحترام... أنا أيوب من معرض إيفان... تعالوا نشوف هالقطعة عن قرب)</p>
-                        <hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(0,0,0,0.1);">
-                        <p><strong>الخاتمة والدعوة للإجراء:</strong></p>
-                        <p class="kurdish-text">"ئەگەر وە دڤێت، نامەیەکێ بۆ مە فرێکن یان سەرەدانا پێشانگەهێ بکەن... ئەم د خزمەتا وە دانە."</p>
-                        <p>(إذا عجبتكم، ارسلوا رسالة أو زوروا المعرض... نحن بخدمتكم)</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">الحوار</span><h2 style="font-size:16px">نصوص التصوير المعتمدة</h2></div>
+      <div class="rv" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+        <div class="script-card">
+          <div class="sc-label">الثواني الثلاث الأولى — الخطاف (باديني)</div>
+          <div class="sc-lang">"سلاڤ و رێز... ئەز ئەیوبم ژ پێشانگەها ئاڤان... وەرن دا ڤێ پارچێ ژ نێزیکڤە ببینین."</div>
+          <div class="sc-trans">— سلام واحترام... أنا من معرض إيفان... تعالوا نشوف هالقطعة عن قرب</div>
+        </div>
+        <div class="script-card">
+          <div class="sc-label">الخاتمة والدعوة للإجراء (CTA)</div>
+          <div class="sc-lang">"ئەگەر وە دڤێت، نامەیەکێ بۆ مە فرێکن یان سەرەدانا پێشانگەهێ بکەن... ئەم د خزمەتا وە دانە."</div>
+          <div class="sc-trans">— إذا عجبتكم، أرسلوا رسالة أو زوروا المعرض... نحن بخدمتكم</div>
+        </div>
+        <div class="script-card">
+          <div class="sc-label">شرح السعر (عربي)</div>
+          <div class="sc-lang">"هالسعر لأن القطعة مصنوعة من خشب الزان، والإسفنج عالي الكثافة، وفيها ضمان — هذا سعر عادل مقارنة بالسوق."</div>
+          <div class="sc-trans">— لا تدافع عن السعر، بيّن القيمة</div>
+        </div>
+      </div>
 
-        <section id="customer-service" class="glass-panel">
-            <h2 class="section-title"><i class="fa-solid fa-headset"></i> خدمة العملاء والردود الرقمية</h2>
-            <p style="margin-bottom: 20px;"><strong>الفريق المسؤول:</strong> سرهاد، علي (بإشراف مازن)</p>
-            
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>قواعد الرد السريع</h4>
-                    <ul class="custom-list">
-                        <li><strong>سرعة البرق:</strong> الرد الأولي لا يتجاوز 5 دقائق.</li>
-                        <li><strong>التعاطف أولاً:</strong> لا تتجادل. امتص غضب الزبون بالاعتذار وابدأ بالحل.</li>
-                        <li><strong>إغلاق المحادثة:</strong> لا تنهي المحادثة بـ "مخلص". اطرح خياراً بديلاً ليبقى التواصل.</li>
-                    </ul>
-                </div>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">Google Maps</span><h2 style="font-size:16px">خطة تحسين التقييمات</h2></div>
+      <div class="pl rv">
+        <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-star"></i></span><div class="pi-body"><div class="pi-title">بعد كل عملية بيع — اطلب التقييم فوراً</div><div class="pi-desc">شفهياً أو عبر واتساب مع رابط مباشر لصفحة Google. لا تنتظر، الزبون الراضي ينسى بسرعة.</div></div></div>
+        <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-qrcode"></i></span><div class="pi-body"><div class="pi-title">ضع QR Code في المعرض</div><div class="pi-desc">عند صندوق الدفع وعند المدخل. زبون راضٍ + هاتف في يده = تقييم فوري.</div></div></div>
+        <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-reply"></i></span><div class="pi-body"><div class="pi-title">رد على كل تقييم — خاصة السلبي</div><div class="pi-desc">"نشكر لك ملاحظتك... تم تحويلها للإدارة وسنتواصل معك." الرد الاحترافي يقلب الانطباع.</div></div></div>
+        <div class="pi"><span class="pi-ico pi-tip"><i class="fa-solid fa-camera"></i></span><div class="pi-body"><div class="pi-title">ارفع صوراً أسبوعياً على Google Maps</div><div class="pi-desc">صور خارجية وداخلية عالية الجودة. جوجل يكافئ الملفات النشطة بظهور أفضل.</div></div></div>
+        <div class="pi"><span class="pi-ico pi-no"><i class="fa-solid fa-ban"></i></span><div class="pi-body"><div class="pi-title">ممنوع — شراء التقييمات أو التلاعب بها</div><div class="pi-desc">سياسة Google تمنع الحوافز مقابل التقييمات. التقييمات لازم تكون حقيقية 100%.</div></div></div>
+      </div>
+    </div>
 
-                <div class="info-card">
-                    <h4>قوالب الردود المعتمدة (باديني)</h4>
-                    <div class="script-box">
-                        <p><strong>ترحيب:</strong> <span class="kurdish-text">"بخێر هاتی بۆ پێشانگەها ئاڤان، چەوا دشێم هاریکاریا تە بکەم؟"</span></p>
-                        <p><strong>حالة غضب/طوارئ:</strong> <span class="kurdish-text">"حەقێ تەیە، لێبورینێ دخازین... هێلە ئەز ل ڤی بابەتی بگەڕم و چارەسەر بکەم."</span></p>
-                        <p><strong>قطعة مباعة:</strong> <span class="kurdish-text">"ئەڤ پارچە نینە، لێ بەديل هەیە گەلەک جوانتر و گونجاوتر..."</span></p>
-                        <p><strong>إنهاء المحادثة:</strong> <span class="kurdish-text">"ئەگەر هەر پرسیارەکا دی هەبیت، ئەم لێرەینە د خزمەتا تە دا."</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- ══ SALES ══ -->
+    <div class="dpanel" id="p-sales">
+      <div class="card rv" style="margin-bottom:16px">
+        <div class="card-title"><i class="fa-solid fa-handshake" style="color:var(--gr);margin-left:8px"></i>قسم المبيعات</div>
+        <div class="card-desc">أبطال الأرض. هم الواجهة الميدانية في الطوابق الستة. مهمتهم ليست البيع — مهمتهم حل مشكلة الزبون، والبيع يأتي كنتيجة طبيعية.</div>
+      </div>
 
-        <section id="sales" class="glass-panel">
-            <h2 class="section-title"><i class="fa-solid fa-handshake"></i> مندوبو المبيعات (أبطال الأرض)</h2>
-            <p style="margin-bottom: 20px;">الواجهة الميدانية في الطوابق الستة. الشعار: "أنا أحل مشكلة الزبون، والبيع يأتي كنتيجة."</p>
+      <div class="quote rv"><p>"أنا أحل مشكلة الزبون، والبيع يأتي كنتيجة."</p></div>
 
-            <div class="info-grid">
-                <div class="info-card">
-                    <span class="tag-forbidden">محظورات صالة العرض (ممنوع منعاً باتاً):</span>
-                    <ul class="custom-list">
-                        <li><strong>الحلفان:</strong> يمنع استخدام القسم بالله (والله العظيم، قسماً بالله) لإقناع الزبون.</li>
-                        <li><strong>الملاحقة:</strong> يمنع المشي خلف الزبون كالظل. رحب به، وأعطه مساحة للتشاور.</li>
-                        <li><strong>الضغط:</strong> يمنع إلحاح الزبون على الشراء الفوري بأساليب رخيصة.</li>
-                        <li><strong>التسعير الوهمي:</strong> يمنع التلاعب بالأسعار قبل الخصم لإيهام الزبون بتخفيض كبير.</li>
-                    </ul>
-                </div>
-                
-                <div class="info-card">
-                    <span class="tag-allowed">قواعد الاستقبال الناجح:</span>
-                    <ul class="custom-list">
-                        <li><strong>استمع لتفهم:</strong> اسأل عن مقاسات الغرفة، لون الحائط، والميزانية قبل العرض.</li>
-                        <li><strong>قاعدة الخيارين:</strong> استبعد القطع غير المناسبة وركز انتباه الزبون على أفضل خيارين لتسهيل القرار.</li>
-                        <li><strong>البيع المتقاطع (Cross-selling):</strong> توجيه الزبون بلطف للأقسام الأخرى (مثل الكهربائيات) لزيادة الفاتورة.</li>
-                        <li><strong>نظام العمولة:</strong> ضاعف اهتمامك بالزبون واغلق صفقات بدون حرق الأسعار لتضاعف راتبك.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">الممنوعات</span><h2 style="font-size:16px">محظورات صالة العرض</h2></div>
+      <div class="fl rv" style="margin-bottom:20px">
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الحلفان:</strong> يمنع تماماً استخدام القسم بالله لإقناع الزبون — يُفقد الثقة فوراً.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الملاحقة:</strong> يمنع المشي خلف الزبون كالظل. رحب به، ثم أعطه مساحة للتشاور مع عائلته.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الضغط على الشراء الفوري:</strong> يمنع إلحاح الزبون بأساليب رخيصة. الإلحاح يطرد الزبون.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>التسعير الوهمي:</strong> يمنع التلاعب بالسعر قبل الخصم لإيهام الزبون بتخفيض كبير.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الحديث عن المنافسين:</strong> يمنع ذكر أي معرض منافس أو مقارنة أثاثهم بأثاثنا.</p></div>
+      </div>
 
-        <section id="carpentry" class="glass-panel">
-            <h2 class="section-title"><i class="fa-solid fa-hammer"></i> النجارة وفرق التركيب (سفراء المعرض)</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <span class="tag-forbidden">تحذير صارم (بروتوكول المنزل):</span>
-                    <ul class="custom-list">
-                        <li><strong>منع البخشيش (الإكرامية):</strong> يمنع التلميح أو طلب أي مبلغ. الإدارة تعوضك بنسبة، كرامة المعرض من كرامتك.</li>
-                        <li><strong>التدخين والضوضاء:</strong> يمنع التدخين داخل المنزل أو على بابه، يمنع تشغيل الأغاني، ويمنع التجول في غرف غير مخصصة للعمل.</li>
-                    </ul>
-                </div>
-                
-                <div class="info-card">
-                    <span class="tag-allowed">خطوات العمل الصحيحة:</span>
-                    <ul class="custom-list">
-                        <li><strong>قبل التوجه:</strong> الاتصال لتأكيد الموعد، ومراجعة "الوصل" لضمان أخذ كافة العدد والمسامير.</li>
-                        <li><strong>أثناء التركيب:</strong> الحفاظ على أرضية المنزل (وضع كرتون تحت العدد). إذا وجد نقص، أبلغ الإدارة ولا تجادل الزبون.</li>
-                        <li><strong>اللمسات النهائية:</strong> مسح البصمات، جمع الكرتون والنايلون في القمامة، وشرح طريقة فتح الأبواب للزبون بلطف.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">المطلوب</span><h2 style="font-size:16px">قواعد الاستقبال الناجح</h2></div>
+      <div class="al rv" style="margin-bottom:20px">
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>استمع لتفهم، لا لترد:</strong> اسأل عن مقاسات غرفته، لون الحائط، وميزانيته قبل عرض أي قطعة.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>قاعدة الخيارين:</strong> عند التردد بين قطع كثيرة، ضيّق الخيارات لأفضل اثنتين فقط لتسهيل القرار.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>البيع المتقاطع:</strong> إذا اشترى غرفة نوم، وجهه بلطف لطابق الكهربائيات لزيادة قيمة الفاتورة.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>شرح القيمة لا الدفاع عن السعر:</strong> "هذا السعر لأن الخشب زان وفيه ضمان" — لا "مو غالي هذا السعر العادل".</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>متابعة ما بعد البيع:</strong> اتصل بالزبون بعد 3 أيام للاطمئنان. هذا يولّد تقييمات ويبني زبائن دائمين.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>طلب التقييم:</strong> بعد التسليم وارتياح الزبون، اطلب منه تقييم المعرض على Google بأدب.</p></div>
+      </div>
 
-        <section id="warehouse" class="glass-panel">
-            <h2 class="section-title"><i class="fa-solid fa-warehouse"></i> المخازن وأسطول النقل (خط الإمداد)</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>بروتوكول المخازن</h4>
-                    <ul class="custom-list">
-                        <li><strong>قدسية الوصل:</strong> يمنع إخراج أي قطعة بدون "وصل" (فاتورة) رسمي ومطابق. الاعتماد على الذاكرة ممنوع.</li>
-                        <li><strong>التنظيم المكاني:</strong> كل قطعة لها مكانها. تسليم المخزن مرتباً في نهاية كل شفت.</li>
-                    </ul>
-                </div>
-                
-                <div class="info-card">
-                    <h4>التحميل والنقل</h4>
-                    <ul class="custom-list">
-                        <li><strong>السلامة قبل السرعة:</strong> الأثاث يعامل كـ "الزجاج". التغليف الجيد يمنع الخدوش، وأي ضرر بسبب الإهمال يتحمله الطاقم.</li>
-                        <li><strong>مهام السائق المزدوجة:</strong> السائق هو "عامل تحميل أساسي". الجلوس في السيارة أثناء التحميل غير مسموح.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">استراتيجية</span><h2 style="font-size:16px">استراتيجيات البيع العالمية المعتمدة</h2></div>
+      <div class="pl rv">
+        <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-lightbulb"></i></span><div class="pi-body"><div class="pi-title">التفكير بعقل الزبون (Empathy Selling)</div><div class="pi-desc">اسأل نفسك: ما الذي يقلق هذا الزبون؟ السعر؟ الجودة؟ المقاسات؟ العمر؟ وجّه حديثك لمعالجة قلقه الأساسي.</div></div></div>
+        <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-trophy"></i></span><div class="pi-body"><div class="pi-title">إبراز الفائدة لا المواصفات (FABE)</div><div class="pi-desc">لا تقل "الخشب زان 18mm". قل "يدوم 15 سنة حتى مع الأطفال". الفائدة تبيع، المواصفات لا تبيع.</div></div></div>
+        <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-users"></i></span><div class="pi-body"><div class="pi-title">دليل اجتماعي (Social Proof)</div><div class="pi-desc">"كثير من الزبائن اختاروا هذا الموديل وراجعونا بعد شهر شاكرين." — الناس تتبع الناس.</div></div></div>
+        <div class="pi"><span class="pi-ico pi-tip"><i class="fa-solid fa-percentage"></i></span><div class="pi-body"><div class="pi-title">سيكولوجية التسعير</div><div class="pi-desc">اذكر السعر بعد شرح القيمة وليس قبله. "هذه القطعة المميزة بـ 399 دولار" أفضل من "سعرها 399".</div></div></div>
+      </div>
+    </div>
 
-        <section id="cleaning" class="glass-panel">
-            <h2 class="section-title"><i class="fa-solid fa-broom"></i> النظافة والخدمات (الجنود المجهولون)</h2>
-            <p style="margin-bottom: 20px;">نظافة المعرض هي أول رسالة تسويقية يتلقاها الزبون.</p>
-            <div class="info-grid">
-                <div class="info-card" style="grid-column: 1 / -1;">
-                    <ul class="custom-list">
-                        <li>التمسيح اليومي للطاولات والزجاج والواجهات. المعرض المغبر يعطي انطباعاً بأن البضاعة راكدة.</li>
-                        <li>الحفاظ على نظافة دورات المياه بشكل دوري ومستمر.</li>
-                        <li>تقديم الضيافة (الشاي/القهوة) للزبائن بابتسامة ووجه بشوش (يكسر الجليد لتسهيل البيع).</li>
-                        <li><span class="tag-forbidden">ممنوع:</span> عدم ترك أكواب الشاي الفارغة على الأثاث المعروض أبداً.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <!-- ══ CS ══ -->
+    <div class="dpanel" id="p-cs">
+      <div class="card rv" style="margin-bottom:16px">
+        <div class="card-title"><i class="fa-solid fa-comments" style="color:var(--tg);margin-left:8px"></i>قسم خدمة العملاء والردود الرقمية</div>
+        <div class="card-desc">خط الدفاع الأول عن سمعة المعرض. كل رسالة، كل تعليق، كل شكوى — هي فرصة لبناء زبون دائم أو خسارته.</div>
+      </div>
 
-    </main>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">المبادئ</span><h2 style="font-size:16px">قواعد خدمة العملاء</h2></div>
+      <div class="rules-grid rv" style="margin-bottom:20px">
+        <div class="rule-card rule-red">
+          <div class="card-icon" style="background:rgba(177,18,22,.12);color:var(--r)"><i class="fa-solid fa-stopwatch"></i></div>
+          <div class="rule-title">سرعة البرق — 5 دقائق</div>
+          <div class="rule-desc">الرد الأولي خلال 5 دقائق كحد أقصى. الزبون على الإنترنت يفقد الاهتمام ويتجه للمنافس خلال دقائق.</div>
+        </div>
+        <div class="rule-card rule-green">
+          <div class="card-icon" style="background:rgba(16,185,129,.12);color:var(--gr)"><i class="fa-solid fa-heart"></i></div>
+          <div class="rule-title">التعاطف أولاً</div>
+          <div class="rule-desc">لا تتجادل. إذا كان الزبون منزعجاً، امتص غضبه بالاعتذار اللبق ثم ابدأ بحل المشكلة. التعاطف يفتح القلب.</div>
+        </div>
+        <div class="rule-card rule-blue">
+          <div class="card-icon" style="background:rgba(59,130,246,.12);color:#3B82F6"><i class="fa-solid fa-door-open"></i></div>
+          <div class="rule-title">لا تغلق المحادثة</div>
+          <div class="rule-desc">لا تنهي بـ "مخلص". اطرح خياراً بديلاً أو سؤالاً مفتوحاً: "هل تريد أن أرسل لك صوراً لقطع مشابهة؟"</div>
+        </div>
+        <div class="rule-card rule-gold">
+          <div class="card-icon" style="background:rgba(212,175,55,.12);color:var(--g)"><i class="fa-solid fa-pen"></i></div>
+          <div class="rule-title">استخدم القوالب المعتمدة</div>
+          <div class="rule-desc">القوالب ليست رسمية باردة — هي إطار تبدأ منه وتُكمله بلمستك الشخصية. توحيد الردود = توحيد الصورة.</div>
+        </div>
+      </div>
 
-    <script>
-        // تفعيل التمرير السلس للروابط
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">القوالب</span><h2 style="font-size:16px">قوالب الردود المعتمدة</h2></div>
+      <div class="rv" style="display:flex;flex-direction:column;gap:10px">
+        <div class="script-card">
+          <div class="sc-label">ترحيب وافتتاحية (باديني)</div>
+          <div class="sc-lang">"بخێر هاتی بۆ پێشانگەها ئاڤان، چەوا دشێم هاریکاریا تە بکەم؟"</div>
+          <div class="sc-trans">أهلاً بك في معرض إيفان، كيف أقدر أساعدك اليوم؟</div>
+        </div>
+        <div class="script-card">
+          <div class="sc-label">امتصاص الغضب / مشكلة (طوارئ)</div>
+          <div class="sc-lang">"حەقێ تەیە، لێبورینێ دخازین... هێلە ئەز ل ڤی بابەتی بگەڕم و چارەسەر بکەم."</div>
+          <div class="sc-trans">معك حق، نعتذر منك بشدة... دعني أتابع الموضوع وأقوم بحله فوراً</div>
+        </div>
+        <div class="script-card">
+          <div class="sc-label">القطعة مباعة أو غير متوفرة</div>
+          <div class="sc-lang">"ئەڤ پارچە نینە، لێ بەديل هەیە گەلەک جوانتر و گونجاوتر..."</div>
+          <div class="sc-trans">هذه القطعة للأسف نفدت، لكن لدينا بديل أجمل ومناسب جداً...</div>
+        </div>
+        <div class="script-card">
+          <div class="sc-label">إنهاء المحادثة بلباقة</div>
+          <div class="sc-lang">"ئەگەر هەر پرسیارەکا دی هەبیت، ئەم لێرەینە د خزمەتا تە دا."</div>
+          <div class="sc-trans">إذا كان لديك أي استفسار آخر، نحن هنا في خدمتك دائماً</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CARPENTER ══ -->
+    <div class="dpanel" id="p-carpenter">
+      <div class="card rv" style="margin-bottom:16px">
+        <div class="card-title"><i class="fa-solid fa-hammer" style="color:var(--g);margin-left:8px"></i>قسم النجارة والتركيب الخارجي</div>
+        <div class="card-desc">سفراء المعرض داخل منازل الزبائن. ما يتركونه من انطباع في المنزل أقوى من أي إعلان. هم يحملون اسم إيفان إلى بيت الزبون.</div>
+      </div>
+
+      <div class="quote rv"><p>"النجار في منزل الزبون يمثل كل موظفي المعرض الـ 45."</p></div>
+
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">بروتوكول المنزل</span><h2 style="font-size:16px">قبل الذهاب للمنزل</h2></div>
+      <div class="pl rv" style="margin-bottom:20px">
+        <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-phone"></i></span><div class="pi-body"><div class="pi-title">اتصل بالزبون لتأكيد الموعد والعنوان</div><div class="pi-desc">قبل الخروج بساعة على الأقل. لا تصل مفاجأة أو تأخر دون إخبار.</div></div></div>
+        <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-toolbox"></i></span><div class="pi-body"><div class="pi-title">راجع الوصل وتأكد من العدة والقطع</div><div class="pi-desc">كل ما تحتاجه لازم يكون معك قبل الخروج. الرجوع للمعرض بسبب نسيان أداة: تأخير + حرج.</div></div></div>
+      </div>
+
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">الممنوعات</span><h2 style="font-size:16px">محظورات منزل الزبون</h2></div>
+      <div class="fl rv" style="margin-bottom:20px">
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>البخشيش والإكرامية:</strong> يمنع التلميح أو الانتظار أو طلب أي مبلغ إضافي. الإدارة تعوضك بنسبة على كل وصل.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>التدخين:</strong> يمنع داخل المنزل أو على بابه. احترام البيت احترام للنفس.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الموسيقى والضوضاء:</strong> يمنع تشغيل الأغاني أثناء العمل في منزل الزبون.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>التجول في المنزل:</strong> يمنع دخول أي غرفة غير مخصصة للتركيب.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الجدال مع الزبون:</strong> إذا كان هناك نقص في قطعة — اعتذر وأبلغ الإدارة، لا تجادل.</p></div>
+      </div>
+
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">المطلوب</span><h2 style="font-size:16px">اللمسات الاحترافية</h2></div>
+      <div class="al rv">
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>حماية الأرضية:</strong> استخدم كرتوناً تحت العدة والقطع لحماية أرضية المنزل من الخدش.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>الدقة في التركيب:</strong> القطعة المثبتة بشكل غير مستوٍ تكلف أكثر من إعادة تركيبها.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>اللمسة الأخيرة:</strong> امسح بصمات الأصابع عن الخشب والمرايا قبل الخروج.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>النظافة التامة:</strong> اجمع كل كرتون ونايلون وضعه عند القمامة، لا تتركه في منزل الزبون.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>التفسير للزبون:</strong> اشرح كيفية فتح الأبواب والميكانيزم بلطف قبل الخروج.</p></div>
+      </div>
+    </div>
+
+    <!-- ══ WAREHOUSE ══ -->
+    <div class="dpanel" id="p-warehouse">
+      <div class="card rv" style="margin-bottom:16px">
+        <div class="card-title"><i class="fa-solid fa-boxes-stacked" style="color:#60A5FA;margin-left:8px"></i>قسم المخازن والنقل</div>
+        <div class="card-desc">خط الإمداد وعصب الحركة. بدون عملهم لا يوجد تسليم ولا يوجد بيع. دقتهم في الأوصال والتحميل تحمي المعرض من الخسائر.</div>
+      </div>
+
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">المخازن</span><h2 style="font-size:16px">بروتوكول المخازن</h2></div>
+      <div class="fl rv" style="margin-bottom:20px">
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>يمنع إخراج أي قطعة بدون وصل:</strong> مهما كانت صغيرة. الذاكرة تخون — الورقة لا تخون. هذا قانون لا استثناء فيه.</p></div>
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>يمنع ترك المخزن في فوضى:</strong> الفوضى تسبب تأخيراً أمام الزبون وخسائر في القطع.</p></div>
+      </div>
+      <div class="al rv" style="margin-bottom:20px">
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>كل قطعة لها مكانها:</strong> الترتيب المكاني يوفر الوقت ويمنع الضياع والتلف.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>تسليم المخزن مرتباً في نهاية كل شفت:</strong> الشفت القادم يبدأ من الصفر بسهولة.</p></div>
+      </div>
+
+      <div class="sh rv" style="margin-bottom:14px"><span class="sl2">النقل</span><h2 style="font-size:16px">بروتوكول التحميل والتوصيل</h2></div>
+      <div class="fl rv" style="margin-bottom:10px">
+        <div class="fi"><i class="fa-solid fa-ban"></i><p><strong>الجلوس في السيارة أثناء التحميل:</strong> السائق هو أيضاً عامل تحميل. العمل الجماعي أساس العمولات.</p></div>
+      </div>
+      <div class="al rv">
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>الأثاث يُعامَل كالزجاج:</strong> التغليف الجيد والترتيب الصحيح داخل السيارة يمنع الخدوش.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>أي ضرر بسبب الإهمال:</strong> يتحمله الطاقم — هذا القانون يحمي الجميع ويرفع مستوى الحرص.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>الالتزام بالمواعيد:</strong> اتصل بالزبون قبل وصولك بـ 30 دقيقة. التأخير بدون إخبار = خسارة ثقة.</p></div>
+      </div>
+    </div>
+
+    <!-- ══ CLEAN ══ -->
+    <div class="dpanel" id="p-clean">
+      <div class="card rv" style="margin-bottom:16px">
+        <div class="card-title"><i class="fa-solid fa-broom" style="color:#A78BFA;margin-left:8px"></i>قسم النظافة والخدمات</div>
+        <div class="card-desc">الجنود المجهولون الذين يصنعون الانطباع الأول. المعرض النظيف يقول للزبون قبل أي بياع: "هذا مكان محترم يستحق ثقتي."</div>
+      </div>
+
+      <div class="quote rv"><p>"نظافة المعرض هي أول رسالة تسويقية يتلقاها الزبون."</p></div>
+
+      <div class="al rv" style="margin-bottom:20px">
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>التمسيح اليومي للطاولات والزجاج والواجهات:</strong> الغبار على الأثاث يعطي انطباع بضاعة قديمة وراكدة.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>الحفاظ على نظافة دورات المياه بشكل دوري:</strong> دورات المياه القذرة تُحبط أي انطباع إيجابي بنيته قبلها.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>تقديم الضيافة بابتسامة ووجه بشوش:</strong> ابتسامتك عند تقديم الشاي تكسر الجليد وتسهل عمل البياع.</p></div>
+        <div class="ai"><i class="fa-solid fa-check"></i><p><strong>لا أكواب فارغة على الأثاث المعروض:</strong> هذه التفاصيل الصغيرة تصنع الفرق.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ KPIs ══ -->
+  <section class="sec" id="kpis">
+    <div class="sh rv"><span class="sl2">المؤشرات</span><h2>📊 مؤشرات الأداء الشهرية</h2></div>
+    <div class="card rv" style="overflow-x:auto">
+      <table class="kpi-table">
+        <thead>
+          <tr>
+            <th>المؤشر</th>
+            <th>الهدف الشهري</th>
+            <th>أداة القياس</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>تقييمات Google جديدة</td><td class="kpi-val">+20 تقييم</td><td>Google Business</td></tr>
+          <tr><td>متوسط التقييم</td><td class="kpi-val">≥ 4.5 ⭐</td><td>Google / Facebook</td></tr>
+          <tr><td>متابعون جدد</td><td class="kpi-val">+500 شهرياً</td><td>Instagram / Facebook</td></tr>
+          <tr><td>معدل التفاعل</td><td class="kpi-val">≥ 5%</td><td>Insights / Analytics</td></tr>
+          <tr><td>زيارات المعرض</td><td class="kpi-val">+15% شهرياً</td><td>Google Maps / استبيان</td></tr>
+          <tr><td>معدل رضا العملاء</td><td class="kpi-val">≥ 90%</td><td>استبيانات / مراجعات</td></tr>
+          <tr><td>سرعة الرد على الرسائل</td><td class="kpi-val">≤ 5 دقائق</td><td>متابعة يدوية يومية</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ PLAN ══ -->
+  <section class="sec" id="plan">
+    <div class="sh rv"><span class="sl2">الخطة التنفيذية</span><h2>🗓️ خطة النشر والتطوير — 90 يوماً</h2></div>
+    <div class="phases rv">
+      <div class="phase ph1">
+        <div class="ph-num">المرحلة الأولى — الشهر الأول</div>
+        <div class="ph-title">بناء الأساس</div>
+        <div class="ph-items">
+          <div class="ph-item">استكمال ملف Google Business بالكامل</div>
+          <div class="ph-item">رفع 15-20 صورة احترافية</div>
+          <div class="ph-item">تجهيز ردود جاهزة لكل الفريق</div>
+          <div class="ph-item">تصوير 10 فيديوهات قصيرة</div>
+          <div class="ph-item">تدريب فريق المبيعات على طلب التقييم</div>
+        </div>
+      </div>
+      <div class="phase ph2">
+        <div class="ph-num">المرحلة الثانية — الشهر الثاني</div>
+        <div class="ph-title">توليد الزخم</div>
+        <div class="ph-items">
+          <div class="ph-item">نشر 4-5 فيديوهات أسبوعياً</div>
+          <div class="ph-item">حملة طلب تقييم للزبائن السابقين</div>
+          <div class="ph-item">الرد على جميع التقييمات والتعليقات</div>
+          <div class="ph-item">نشر عروض محدودة الوقت</div>
+          <div class="ph-item">تفعيل إعلانات مدفوعة بـ 5$ يومياً</div>
+        </div>
+      </div>
+      <div class="phase ph3">
+        <div class="ph-num">المرحلة الثالثة — الشهر الثالث</div>
+        <div class="ph-title">النمو والتوسع</div>
+        <div class="ph-items">
+          <div class="ph-item">تحليل أفضل المحتوى وتكراره</div>
+          <div class="ph-item">التعاون مع مؤثرين محليين 2-3</div>
+          <div class="ph-item">بناء برنامج ولاء للزبائن</div>
+          <div class="ph-item">تقرير شهري لقياس KPIs</div>
+          <div class="ph-item">توسيع الانتشار لمجموعات دهوك</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DIGITAL ══ -->
+  <section class="sec" id="digital">
+    <div class="sh rv"><span class="sl2">الحضور الرقمي</span><h2>🌐 استراتيجية المنصات الرقمية</h2></div>
+    <div class="rules-grid rv">
+      <div class="rule-card rule-blue">
+        <div class="card-icon" style="background:rgba(255,0,0,.1);color:#FF0000"><i class="fa-brands fa-tiktok"></i></div>
+        <div class="rule-title">تيك توك — للانتشار السريع</div>
+        <div class="rule-desc">فيديوهات عمودية 9:16. أول 3 ثوانٍ قوية. "قبل وبعد"، جولات المعرض، العروض المحدودة. الهاشتاقات المحلية #معرض_ايفان #اثاث_دهوك.</div>
+      </div>
+      <div class="rule-card rule-red">
+        <div class="card-icon" style="background:rgba(225,48,108,.1);color:#E1306C"><i class="fa-brands fa-instagram"></i></div>
+        <div class="rule-title">إنستغرام — للفخامة والتفاصيل</div>
+        <div class="rule-desc">Reels لتفاصيل الخياطة والأقمشة. Highlights لتجارب العملاء. Stories يومية للعروض المؤقتة. الرد الفوري على التعليقات.</div>
+      </div>
+      <div class="rule-card rule-blue">
+        <div class="card-icon" style="background:rgba(24,119,242,.1);color:#1877F2"><i class="fa-brands fa-facebook-f"></i></div>
+        <div class="rule-title">فيسبوك — للعروض والتواصل</div>
+        <div class="rule-desc">العروض الموسمية والعائلية. Facebook Shop لعرض المنتجات. الانضمام لمجموعات البيع في دهوك. الرد السريع جداً على الرسائل.</div>
+      </div>
+      <div class="rule-card rule-green">
+        <div class="card-icon" style="background:rgba(0,0,0,.1);color:var(--text)"><i class="fa-brands fa-google"></i></div>
+        <div class="rule-title">Google Maps — الأساس</div>
+        <div class="rule-desc">ملف مكتمل 100%. صور أسبوعية. رد على كل تقييم. منشورات عروض داخل الملف. الكلمات المفتاحية: أثاث جديد دهوك، مستعمل، تبديل.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ REVIEWS ══ -->
+  <section class="sec" id="reviews">
+    <div class="sh rv"><span class="sl2">السمعة</span><h2>⭐ إدارة التقييمات والسمعة</h2></div>
+    <div class="pl rv">
+      <div class="pi"><span class="pi-ico pi-ok"><i class="fa-solid fa-star"></i></span><div class="pi-body"><div class="pi-title">خطاب الرد على تقييم إيجابي</div><div class="pi-desc">"شكراً جزيلاً لك على هذا التقييم الجميل. يسعدنا أن تجربتك في معرض إيفان كانت مميزة. نتطلع لخدمتك دائماً 🙏"</div></div></div>
+      <div class="pi"><span class="pi-ico pi-no"><i class="fa-solid fa-star-half-stroke"></i></span><div class="pi-body"><div class="pi-title">خطاب الرد على تقييم سلبي عن السعر</div><div class="pi-desc">"نقدر رأيك ونشكرك على صراحتك. نحرص على تقديم أفضل جودة وخامات تضمن استدامة الأثاث لسنوات. ندعوك لزيارتنا للاطلاع على تشكيلاتنا المتنوعة لكل الميزانيات."</div></div></div>
+      <div class="pi"><span class="pi-ico pi-no"><i class="fa-solid fa-triangle-exclamation"></i></span><div class="pi-body"><div class="pi-title">خطاب الرد على شكوى موصل أو تأخير</div><div class="pi-desc">"نعتذر بشدة عن هذا التأخير، هذا لا يمثل مستوانا المعتاد. تم تحويل ملاحظتك للإدارة وسيتم التواصل معك خلال ساعات لتعويضك."</div></div></div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ══ -->
+  <section class="sec" id="contact">
+    <div class="sh rv"><span class="sl2">التواصل</span><h2>📞 بوابة التواصل السريع</h2></div>
+    <div class="cta-card rv">
+      <div class="cta-icon"><i class="fa-solid fa-headset" style="color:var(--r)"></i></div>
+      <h3 style="font-size:20px;font-weight:900;margin-bottom:6px">الخط الساخن — معرض إيفان</h3>
+      <p style="font-size:13.5px;color:var(--text2);max-width:420px;margin:0 auto;line-height:1.7">للاستفسار، الشكوى، أو أي طلب مستعجل. نحن متاحون دائماً لخدمتكم.</p>
+      <p style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:900;color:var(--r);margin-top:14px;direction:ltr">+964 751 484 4125</p>
+      <div class="cta-btns">
+        <a href="tel:+9647514844125" class="btn btn-tel"><i class="fa-solid fa-phone"></i>اتصل مباشرة</a>
+        <a href="https://wa.me/9647514844125" target="_blank" class="btn btn-wa"><i class="fa-brands fa-whatsapp"></i>واتساب</a>
+        <a href="https://t.me/m3rdevan1" target="_blank" class="btn btn-tg"><i class="fa-brands fa-telegram"></i>تلجرام</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer style="text-align:center;padding:24px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);position:relative;z-index:1">
+  <p>&copy; 2026 معرض إيفان — دهوك، العراق &nbsp;|&nbsp; الدليل التشغيلي الداخلي</p>
+  <p style="margin-top:4px">Her şev nûtirîn bi me re — كل جديد عندنا</p>
+</footer>
+
+<script>
+// ══ THEME ══
+function applyTheme(d){
+  const h=document.documentElement,b=document.body;
+  d?h.classList.add("dark"):h.classList.remove("dark");
+  document.getElementById("mI").style.display=d?"":"none";
+  document.getElementById("sI").style.display=d?"none":"";
+  localStorage.setItem("iv-sop-theme",d?"dark":"light");
+}
+function toggleTheme(){applyTheme(!document.documentElement.classList.contains("dark"));}
+applyTheme(localStorage.getItem("iv-sop-theme")!=="light");
+
+// ══ SIDEBAR ══
+function openSb(){document.getElementById("sb").classList.add("open");document.getElementById("sbOv").classList.add("on");}
+function closeSb(){document.getElementById("sb").classList.remove("open");document.getElementById("sbOv").classList.remove("on");}
+
+// ══ SCROLL ══
+window.scrollTo=function(id){const el=document.querySelector(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});};
+
+// ══ DEPT TABS ══
+function setTab(id,btn){
+  document.querySelectorAll(".dpanel").forEach(p=>p.classList.remove("on"));
+  document.querySelectorAll(".dtab").forEach(t=>t.classList.remove("on"));
+  const p=document.getElementById("p-"+id);
+  if(p){p.classList.add("on");}
+  if(btn){btn.classList.add("on");}
+  else{
+    // find btn by data
+    document.querySelectorAll(".dtab").forEach(t=>{
+      if(t.getAttribute("onclick")&&t.getAttribute("onclick").includes("'"+id+"'")){t.classList.add("on");}
+    });
+  }
+}
+// tab buttons
+document.querySelectorAll(".dtab").forEach(btn=>{
+  btn.addEventListener("click",function(){
+    const m=this.getAttribute("onclick").match(/setTab\('(\w+)'/);
+    if(m)setTab(m[1],this);
+  });
+});
+
+// ══ REVEAL ══
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("vis");ro.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll(".rv").forEach(el=>ro.observe(el));
+
+// ══ TOAST ══
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("s");
+  setTimeout(()=>t.classList.remove("s"),2500);
+}
+
+console.log("📋 Ivan Showroom SOP — دهوك");
+</script>
 </body>
 </html>
