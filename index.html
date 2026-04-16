@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دستور معرض إيفان | لوحة التشغيل الشاملة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-main: #1e272e;
+            --text-muted: #485460;
+            --accent-blue: #0984e3;
+            --accent-green: #00b894;
+            --accent-red: #d63031;
+            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* القائمة الجانبية الزجاجية */
+        aside {
+            width: var(--sidebar-width);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-left: 1px solid var(--glass-border);
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            padding: 30px 15px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .logo-container h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2d3436;
+            letter-spacing: 1px;
+        }
+
+        .logo-container p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        nav ul { list-style: none; }
+        nav ul li { margin-bottom: 8px; }
+        nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        nav ul li a i {
+            margin-left: 12px;
+            font-size: 18px;
+            width: 25px;
+            text-align: center;
+            color: var(--accent-blue);
+        }
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: translateX(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* المحتوى الرئيسي */
+        main {
+            margin-right: var(--sidebar-width);
+            padding: 40px;
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .header-title h1 {
+            font-size: 3em;
+            color: #2d3436;
+            text-shadow: 0 4px 15px rgba(255,255,255,0.5);
+            margin-bottom: 10px;
+        }
+
+        /* الكروت الزجاجية للأقسام */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #2d3436;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid rgba(255,255,255,0.6);
+            padding-bottom: 10px;
+        }
+
+        .section-title i {
+            margin-left: 15px;
+            font-size: 28px;
+            color: var(--accent-blue);
+        }
+
+        /* تنسيق الشبكة للمعلومات */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+
+        .info-card h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2d3436;
+        }
+
+        ul.custom-list {
+            list-style: none;
+        }
+
+        ul.custom-list li {
+            position: relative;
+            padding-right: 25px;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        ul.custom-list li::before {
+            content: '•';
+            color: var(--accent-blue);
+            font-weight: bold;
+            font-size: 20px;
+            position: absolute;
+            right: 0;
+            top: -2px;
+        }
+
+        /* تمييز المسموح والممنوع */
+        .tag-allowed { color: var(--accent-green); font-weight: 700; display: inline-block; margin-bottom: 5px; }
+        .tag-forbidden { color: var(--accent-red); font-weight: 700; display: inline-block; margin-bottom: 5px; }
+        
+        .script-box {
+            background: rgba(0, 0, 0, 0.05);
+            border-right: 4px solid var(--accent-blue);
+            padding: 15px;
+            border-radius: 10px;
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+
+        .kurdish-text {
+            color: #0984e3;
+            font-weight: bold;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* رسائل تحذيرية وذهبية */
+        .golden-rule {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.2) 0%, rgba(243, 156, 18, 0.2) 100%);
+            border: 1px solid rgba(241, 196, 15, 0.4);
+            text-align: center;
+        }
+
+        /* شاشات الجوال */
+        @media (max-width: 900px) {
+            aside { transform: translateX(100%); transition: 0.3s; }
+            main { margin-right: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo-container">
+            <h2>IVAN</h2>
+            <p>SHOWROOM - DUHOK</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#rules"><i class="fa-solid fa-crown"></i> المبادئ الذهبية</a></li>
+                <li><a href="#marketing"><i class="fa-solid fa-bullhorn"></i> الإعلام والتسويق</a></li>
+                <li><a href="#customer-service"><i class="fa-solid fa-headset"></i> خدمة العملاء</a></li>
+                <li><a href="#sales"><i class="fa-solid fa-handshake"></i> مندوبو المبيعات</a></li>
+                <li><a href="#carpentry"><i class="fa-solid fa-hammer"></i> النجارة والتركيب</a></li>
+                <li><a href="#warehouse"><i class="fa-solid fa-warehouse"></i> المخازن والنقل</a></li>
+                <li><a href="#cleaning"><i class="fa-solid fa-broom"></i> النظافة والخدمات</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="header-title">
+            <h1>الفهرس التشغيلي - معرض إيفان</h1>
+            <p>نظام التشغيل القياسي (SOP) لجميع كوادر المعرض - قانون التعاملات اليومية</p>
+            <p style="font-weight: bold; margin-top: 10px; color: #d63031;">"نحكي الحقيقة كما هي، نقدم الحلول دون أعذار، ونحافظ على الاحترام المطلق للزبون. سمعتنا هي رأس مالنا الوحيد."</p>
+        </div>
+
+        <section id="rules" class="glass-panel golden-rule">
+            <h2 class="section-title" style="justify-content: center; border: none;"><i class="fa-solid fa-star"></i> القواعد الذهبية الأربع (تطبق على الجميع)</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>1. الصدق المطلق والشفافية</h4>
+                    <p>يمنع منعاً باتاً المبالغة في وصف الجودة أو الخداع. يمنع ذكر المنافسين أو مقارنة بضائعنا بهم. الزبون يشتري مصداقيتنا أولاً.</p>
+                </div>
+                <div class="info-card">
+                    <h4>2. السرعة في الإنجاز</h4>
+                    <p>الرد على الرسائل خلال 5 دقائق كحد أقصى. تسليم البضاعة في موعدها، ومتابعة أي مشكلة وحلها خلال 24 ساعة.</p>
+                </div>
+                <div class="info-card">
+                    <h4>3. الثبات في المستوى</h4>
+                    <p>نفس مستوى الاحترام سواء كان الزبون مع مدير المبيعات، عامل التحميل، أو النجار. نحن كيان واحد بصوت واحد.</p>
+                </div>
+                <div class="info-card">
+                    <h4>4. حل المشكلة بدل الجدال</h4>
+                    <p>الزبون الغاضب يبحث عن حل وليس مبررات. يمنع الدفاع أو توجيه اللوم للزبون. استمع، اعترف بالخطأ، وقدم الحل فوراً.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="marketing" class="glass-panel">
+            <h2 class="section-title"><i class="fa-brands fa-tiktok"></i> الإعلام والتسويق الرقمي</h2>
+            <p style="margin-bottom: 20px;"><strong>الفريق المسؤول:</strong> مازن (المدير)، أيوب (الواجهة)، الند (المصمم والمصور)</p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="tag-forbidden">الخطوط الحمراء (ممنوعات مطلقة):</span>
+                    <ul class="custom-list">
+                        <li><strong>النشر العشوائي:</strong> يمنع نشر أي محتوى دون مراجعته والموافقة عليه من مازن.</li>
+                        <li><strong>المؤثرات المزعجة:</strong> يمنع الموسيقى الصاخبة والانتقالات المزعجة. المحتوى يجب أن يكون هادئاً وواضحاً.</li>
+                        <li><strong>إزعاج المتابعين:</strong> فيديو واحد كل ساعة كحد أقصى لتجنب حرق المحتوى.</li>
+                        <li><strong>السخرية والتشهير:</strong> يمنع تصوير الزبائن بدون إذن أو الاستهزاء بأي موقف.</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <span class="tag-allowed">منهجية أيوب (الواجهة) والند (المصور):</span>
+                    <ul class="custom-list">
+                        <li>أيوب هو "عين الزبون الخبير" (ينصح ولا يبيع). الند يصوره بثبات للحفاظ على الاحترافية.</li>
+                        <li><strong>قسم المستعمل (الشفافية الصادمة):</strong> إظهار عيوب القطعة والخدوش قبل الميزات، وتوضيح أن السعر رخيص بسبب العيب.</li>
+                        <li><strong>قسم الجديد:</strong> عدم التفخيم. إذا كانت القطعة تجارية قل "ممتازة للميزانيات المحدودة".</li>
+                    </ul>
+                </div>
+
+                <div class="info-card" style="grid-column: 1 / -1;">
+                    <h4><i class="fa-solid fa-microphone"></i> النصوص المعتمدة للتصوير (باديني)</h4>
+                    <div class="script-box">
+                        <p><strong>الثواني الثلاث الأولى (الخطاف):</strong></p>
+                        <p class="kurdish-text">"سلاڤ و رێز... ئەز ئەیوبم ژ پێشانگەها ئاڤان... وەرن دا ڤێ پارچێ ژ نێزیکڤە ببینین."</p>
+                        <p>(سلام واحترام... أنا أيوب من معرض إيفان... تعالوا نشوف هالقطعة عن قرب)</p>
+                        <hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <p><strong>الخاتمة والدعوة للإجراء:</strong></p>
+                        <p class="kurdish-text">"ئەگەر وە دڤێت، نامەیەکێ بۆ مە فرێکن یان سەرەدانا پێشانگەهێ بکەن... ئەم د خزمەتا وە دانە."</p>
+                        <p>(إذا عجبتكم، ارسلوا رسالة أو زوروا المعرض... نحن بخدمتكم)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="customer-service" class="glass-panel">
+            <h2 class="section-title"><i class="fa-solid fa-headset"></i> خدمة العملاء والردود الرقمية</h2>
+            <p style="margin-bottom: 20px;"><strong>الفريق المسؤول:</strong> سرهاد، علي (بإشراف مازن)</p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>قواعد الرد السريع</h4>
+                    <ul class="custom-list">
+                        <li><strong>سرعة البرق:</strong> الرد الأولي لا يتجاوز 5 دقائق.</li>
+                        <li><strong>التعاطف أولاً:</strong> لا تتجادل. امتص غضب الزبون بالاعتذار وابدأ بالحل.</li>
+                        <li><strong>إغلاق المحادثة:</strong> لا تنهي المحادثة بـ "مخلص". اطرح خياراً بديلاً ليبقى التواصل.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4>قوالب الردود المعتمدة (باديني)</h4>
+                    <div class="script-box">
+                        <p><strong>ترحيب:</strong> <span class="kurdish-text">"بخێر هاتی بۆ پێشانگەها ئاڤان، چەوا دشێم هاریکاریا تە بکەم؟"</span></p>
+                        <p><strong>حالة غضب/طوارئ:</strong> <span class="kurdish-text">"حەقێ تەیە، لێبورینێ دخازین... هێلە ئەز ل ڤی بابەتی بگەڕم و چارەسەر بکەم."</span></p>
+                        <p><strong>قطعة مباعة:</strong> <span class="kurdish-text">"ئەڤ پارچە نینە، لێ بەديل هەیە گەلەک جوانتر و گونجاوتر..."</span></p>
+                        <p><strong>إنهاء المحادثة:</strong> <span class="kurdish-text">"ئەگەر هەر پرسیارەکا دی هەبیت، ئەم لێرەینە د خزمەتا تە دا."</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sales" class="glass-panel">
+            <h2 class="section-title"><i class="fa-solid fa-handshake"></i> مندوبو المبيعات (أبطال الأرض)</h2>
+            <p style="margin-bottom: 20px;">الواجهة الميدانية في الطوابق الستة. الشعار: "أنا أحل مشكلة الزبون، والبيع يأتي كنتيجة."</p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="tag-forbidden">محظورات صالة العرض (ممنوع منعاً باتاً):</span>
+                    <ul class="custom-list">
+                        <li><strong>الحلفان:</strong> يمنع استخدام القسم بالله (والله العظيم، قسماً بالله) لإقناع الزبون.</li>
+                        <li><strong>الملاحقة:</strong> يمنع المشي خلف الزبون كالظل. رحب به، وأعطه مساحة للتشاور.</li>
+                        <li><strong>الضغط:</strong> يمنع إلحاح الزبون على الشراء الفوري بأساليب رخيصة.</li>
+                        <li><strong>التسعير الوهمي:</strong> يمنع التلاعب بالأسعار قبل الخصم لإيهام الزبون بتخفيض كبير.</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <span class="tag-allowed">قواعد الاستقبال الناجح:</span>
+                    <ul class="custom-list">
+                        <li><strong>استمع لتفهم:</strong> اسأل عن مقاسات الغرفة، لون الحائط، والميزانية قبل العرض.</li>
+                        <li><strong>قاعدة الخيارين:</strong> استبعد القطع غير المناسبة وركز انتباه الزبون على أفضل خيارين لتسهيل القرار.</li>
+                        <li><strong>البيع المتقاطع (Cross-selling):</strong> توجيه الزبون بلطف للأقسام الأخرى (مثل الكهربائيات) لزيادة الفاتورة.</li>
+                        <li><strong>نظام العمولة:</strong> ضاعف اهتمامك بالزبون واغلق صفقات بدون حرق الأسعار لتضاعف راتبك.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="carpentry" class="glass-panel">
+            <h2 class="section-title"><i class="fa-solid fa-hammer"></i> النجارة وفرق التركيب (سفراء المعرض)</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="tag-forbidden">تحذير صارم (بروتوكول المنزل):</span>
+                    <ul class="custom-list">
+                        <li><strong>منع البخشيش (الإكرامية):</strong> يمنع التلميح أو طلب أي مبلغ. الإدارة تعوضك بنسبة، كرامة المعرض من كرامتك.</li>
+                        <li><strong>التدخين والضوضاء:</strong> يمنع التدخين داخل المنزل أو على بابه، يمنع تشغيل الأغاني، ويمنع التجول في غرف غير مخصصة للعمل.</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <span class="tag-allowed">خطوات العمل الصحيحة:</span>
+                    <ul class="custom-list">
+                        <li><strong>قبل التوجه:</strong> الاتصال لتأكيد الموعد، ومراجعة "الوصل" لضمان أخذ كافة العدد والمسامير.</li>
+                        <li><strong>أثناء التركيب:</strong> الحفاظ على أرضية المنزل (وضع كرتون تحت العدد). إذا وجد نقص، أبلغ الإدارة ولا تجادل الزبون.</li>
+                        <li><strong>اللمسات النهائية:</strong> مسح البصمات، جمع الكرتون والنايلون في القمامة، وشرح طريقة فتح الأبواب للزبون بلطف.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="warehouse" class="glass-panel">
+            <h2 class="section-title"><i class="fa-solid fa-warehouse"></i> المخازن وأسطول النقل (خط الإمداد)</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>بروتوكول المخازن</h4>
+                    <ul class="custom-list">
+                        <li><strong>قدسية الوصل:</strong> يمنع إخراج أي قطعة بدون "وصل" (فاتورة) رسمي ومطابق. الاعتماد على الذاكرة ممنوع.</li>
+                        <li><strong>التنظيم المكاني:</strong> كل قطعة لها مكانها. تسليم المخزن مرتباً في نهاية كل شفت.</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4>التحميل والنقل</h4>
+                    <ul class="custom-list">
+                        <li><strong>السلامة قبل السرعة:</strong> الأثاث يعامل كـ "الزجاج". التغليف الجيد يمنع الخدوش، وأي ضرر بسبب الإهمال يتحمله الطاقم.</li>
+                        <li><strong>مهام السائق المزدوجة:</strong> السائق هو "عامل تحميل أساسي". الجلوس في السيارة أثناء التحميل غير مسموح.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="cleaning" class="glass-panel">
+            <h2 class="section-title"><i class="fa-solid fa-broom"></i> النظافة والخدمات (الجنود المجهولون)</h2>
+            <p style="margin-bottom: 20px;">نظافة المعرض هي أول رسالة تسويقية يتلقاها الزبون.</p>
+            <div class="info-grid">
+                <div class="info-card" style="grid-column: 1 / -1;">
+                    <ul class="custom-list">
+                        <li>التمسيح اليومي للطاولات والزجاج والواجهات. المعرض المغبر يعطي انطباعاً بأن البضاعة راكدة.</li>
+                        <li>الحفاظ على نظافة دورات المياه بشكل دوري ومستمر.</li>
+                        <li>تقديم الضيافة (الشاي/القهوة) للزبائن بابتسامة ووجه بشوش (يكسر الجليد لتسهيل البيع).</li>
+                        <li><span class="tag-forbidden">ممنوع:</span> عدم ترك أكواب الشاي الفارغة على الأثاث المعروض أبداً.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // تفعيل التمرير السلس للروابط
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
